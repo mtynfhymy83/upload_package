@@ -41,3 +41,38 @@ class MediaController extends Controller
             'error' => 'فایل یافت نشد.',
         ], 400);
     }
+    /**
+     * انتقال فایل از دیسک موقت به دیسک نهایی و ذخیره در دیتابیس
+     */
+    public function commitUpload(Request $request)
+    {
+        $validated = $request->validate([
+            'path' => 'required|string',
+            'model_type' => 'required|string',
+            'model_id' => 'required|integer',
+            'original_name' => 'string',
+            'collection' => 'sometimes|string',
+        ]);
+//        $filePath = $validated['path'];
+
+        $url = $this->mediaService->moveFileToPermanentStorage(
+            $temp_path=$validated['path'],
+            $modelType=$validated['model_type'],
+            $modelId=$validated['model_id'],
+            $originalName=$validated['original_name'],
+            $collection=$validated['collection'] ?? 'default'
+        );
+
+
+        if ($url) {
+            return response()->json([
+                'url' => $url,
+                'message' => 'فایل با موفقیت آپلود شد.',
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'انتقال فایل با شکست مواجه شد.',
+        ], 500);
+    }
+}
