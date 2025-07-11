@@ -1,0 +1,30 @@
+{
+  "name": "matin/laravel-media",
+  "description": "Upload your media very easy",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.0.0",
+  "autoload": {
+    "psr-4": {
+      "Matin\\Media\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "matin",
+      "email": "mtynfhymy83@gmail.com",
+      "role": "developer",
+      "homepage": "https://github.com/mtynfhymy83"
+    }],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Matin\\Media\\LaravelMediaServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^12.0"
+  }
+}
