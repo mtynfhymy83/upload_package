@@ -1,4 +1,5 @@
 <?php
+
 namespace Matin\Media\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class MediaController extends Controller
             'error' => 'فایل یافت نشد.',
         ], 400);
     }
+
     /**
      * انتقال فایل از دیسک موقت به دیسک نهایی و ذخیره در دیتابیس
      */
@@ -75,4 +77,44 @@ class MediaController extends Controller
             'message' => 'انتقال فایل با شکست مواجه شد.',
         ], 500);
     }
+    public function index(string $model_type, int $model_id)
+    {
+//        $collection = $request->query('collection');
+
+        $mediaList = $this->mediaService->getMedia(
+            $model_type,
+            $model_id,
+
+        );
+
+        // فقط path، model_type، model_id و collection را برمی‌گرداند
+        return response()->json($mediaList->map(function ($media) {
+            return [
+                'path' => $media->path,
+                'model_type' => $media->model_type,
+                'model_id' => $media->model_id,
+                'collection' => $media->collection,
+            ];
+        }));
+    }
+
+
+
+
+    /**
+     * حذف یک فایل از فضای نهایی و دیتابیس
+     */
+    public function destroyByPath(Request $request)
+    {
+        $validated = $request->validate([
+            'path' => 'required|string',
+        ]);
+
+        $ok = $this->mediaService->deleteByPath($validated['path']);
+
+        return $ok
+            ? response()->json(['message' => 'فایل و رکورد حذف شد.'], 200)
+            : response()->json(['message' => 'حذف فایل با شکست مواجه شد.'], 500);
+    }
+
 }
