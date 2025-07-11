@@ -60,7 +60,7 @@ class MediaService
             if (!$fileUrl) {
                 throw new \Exception("Failed to generate file URL");
             }
-            // 7. Create media record
+
             $media = new Media([
                 'model_type' => $modelType,
                 'model_id' => $modelId,
